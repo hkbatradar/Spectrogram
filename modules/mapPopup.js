@@ -927,28 +927,6 @@ export function initMapPopup({
     }
   }
 
-  function updateWindowButtonState() {
-    if (isMinimized) {
-      // 最小化狀態的按鈕樣式
-      minBtn.innerHTML = '<i class="fa-solid fa-window-maximize"></i>';
-      minBtn.title = 'Restore Up';
-      maxBtn.innerHTML = '<i class="fa-regular fa-square"></i>';
-      maxBtn.title = 'Maximize';
-    } else if (isMaximized) {
-      // 最大化狀態的按鈕樣式
-      minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
-      minBtn.title = 'Minimize';
-      maxBtn.innerHTML = '<i class="fa-regular fa-clone"></i>';
-      maxBtn.title = 'Restore Down';
-    } else {
-      // 浮動狀態的按鈕樣式
-      minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
-      minBtn.title = 'Minimize';
-      maxBtn.innerHTML = '<i class="fa-regular fa-square"></i>';
-      maxBtn.title = 'Maximize';
-    }
-  }
-
   function toggleMaximize() {
     if (!isMaximized) {
       // 如果視窗是最小化狀態，要先還原所有隱藏的元素
@@ -960,6 +938,8 @@ export function initMapPopup({
         if (coordScaleWrapper) coordScaleWrapper.style.display = '';
         if (textToggleContainer) textToggleContainer.style.setProperty('margin-top', '1px', 'important');
         isMinimized = false;
+        minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
+        minBtn.title = 'Minimize';
         
         // 從最小化還原時，使用儲存的浮動視窗狀態
         popup.style.width = `${floatingState.width}px`;
@@ -987,15 +967,18 @@ export function initMapPopup({
       popup.style.top = '0px';
       popup.style.width = `${window.innerWidth -2}px`;
       popup.style.height = `${window.innerHeight -2}px`;
+      maxBtn.innerHTML = '<i class="fa-regular fa-clone"></i>';
+      maxBtn.title = 'Restore Down';
       isMaximized = true;
     } else {
       popup.style.width = `${floatingState.width}px`;
       popup.style.height = `${floatingState.height}px`;
       popup.style.left = `${floatingState.left}px`;
       popup.style.top = `${floatingState.top}px`;
+      maxBtn.innerHTML = '<i class="fa-regular fa-square"></i>';
+      maxBtn.title = 'Maximize';
       isMaximized = false;
     }
-    updateWindowButtonState();
     map?.invalidateSize();
   }
 
@@ -1015,37 +998,34 @@ export function initMapPopup({
       localStorage.setItem('mapFloatingLeft', floatingState.left);
       localStorage.setItem('mapFloatingTop', floatingState.top);
       
-      // 設置最小化狀態
       popup.style.left = '0px';
       popup.style.top = `${window.innerHeight - 362}px`;
       popup.style.width = '290px';
       popup.style.height = '360px';
+      minBtn.innerHTML = '<i class="fa-solid fa-window-maximize"></i>';
+      minBtn.title = 'Restore Up';
       if (layersControlContainer) layersControlContainer.style.display = 'none';
       if (zoomControlContainer) zoomControlContainer.style.display = 'none';
       if (routeToggleContainer) routeToggleContainer.style.display = 'none';
       if (exportControlContainer) exportControlContainer.style.display = 'none';
       if (coordScaleWrapper) coordScaleWrapper.style.display = 'none';
       if (textToggleContainer) textToggleContainer.style.setProperty('margin-top', '10px', 'important');
-      
       isMinimized = true;
-      isMaximized = false;
     } else {
-      // 從最小化狀態還原，直接使用儲存的浮動視窗狀態
       popup.style.width = `${floatingState.width}px`;
       popup.style.height = `${floatingState.height}px`;
       popup.style.left = `${floatingState.left}px`;
       popup.style.top = `${floatingState.top}px`;
-      
+      minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
+      minBtn.title = 'Minimize';
       if (layersControlContainer) layersControlContainer.style.display = '';
       if (zoomControlContainer) zoomControlContainer.style.display = '';
       if (routeToggleContainer) routeToggleContainer.style.display = '';
       if (exportControlContainer) exportControlContainer.style.display = '';
       if (coordScaleWrapper) coordScaleWrapper.style.display = '';
       if (textToggleContainer) textToggleContainer.style.setProperty('margin-top', '1px', 'important');
-      
       isMinimized = false;
     }
-    updateWindowButtonState();
     map?.invalidateSize();
   }
 
