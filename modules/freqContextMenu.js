@@ -1,5 +1,10 @@
+import { initDropdown } from "./dropdown.js";
+
 // 確保在全域可以存取到 handleCallTypeChange
 window.handleCallTypeChange = window.handleCallTypeChange || function() {};
+
+// 先初始化並保存 callTypeDropdown 實例
+const callTypeDropdown = initDropdown('callTypeInput', ['CF-FM','FM-CF-FM','FM','FM-QCF','FM-QCF-FM','QCF']);
 
 export function initFreqContextMenu({
   viewerId,
@@ -99,21 +104,13 @@ export function initFreqContextMenu({
         item.style.background = 'rgba(0,0,0,0.08)';
       }
       item.addEventListener('click', () => {
-        const dropdownBtn = document.getElementById('callTypeInput');
-        if (dropdownBtn?._dropdown) {
-          // 使用 select 方法，它會：
-          // 1. 更新 selectedIndex
-          // 2. 更新按鈕文字
-          // 3. 根據數組索引切換 selected class（這樣會自動對應到正確的 data-index）
-          // 4. 觸發 onChange callback
-          dropdownBtn._dropdown.select(idx);
+        // 直接使用 callTypeDropdown.select(idx)
+        if (callTypeDropdown) {
+          callTypeDropdown.select(idx);
         } else {
           // fallback: 若找不到 dropdown 實例
           if (window.handleCallTypeChange) {
             window.handleCallTypeChange(opt, idx);
-          }
-          if (dropdownBtn) {
-            dropdownBtn.textContent = opt;
           }
         }
         hideSubmenu();
