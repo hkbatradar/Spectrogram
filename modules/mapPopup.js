@@ -960,6 +960,14 @@ export function initMapPopup({
         if (coordScaleWrapper) coordScaleWrapper.style.display = '';
         if (textToggleContainer) textToggleContainer.style.setProperty('margin-top', '1px', 'important');
         isMinimized = false;
+        
+        // 從最小化還原時，使用儲存的浮動視窗狀態
+        popup.style.width = `${floatingState.width}px`;
+        popup.style.height = `${floatingState.height}px`;
+        popup.style.left = `${floatingState.left}px`;
+        popup.style.top = `${floatingState.top}px`;
+        map?.invalidateSize();
+        return;
       }
 
       // 如果是從浮動狀態切換到最大化，儲存當前狀態
@@ -993,18 +1001,19 @@ export function initMapPopup({
 
   function toggleMinimize() {
     if (!isMinimized) {
-      // 如果是從浮動狀態最小化，儲存當前狀態
-      if (!isMaximized) {
-        floatingState.width = popup.offsetWidth;
-        floatingState.height = popup.offsetHeight;
-        floatingState.left = popup.offsetLeft;
-        floatingState.top = popup.offsetTop;
-        
-        localStorage.setItem('mapFloatingWidth', floatingState.width);
-        localStorage.setItem('mapFloatingHeight', floatingState.height);
-        localStorage.setItem('mapFloatingLeft', floatingState.left);
-        localStorage.setItem('mapFloatingTop', floatingState.top);
-      }
+      if (isMaximized) toggleMaximize();
+      
+      // 儲存目前的浮動視窗狀態
+      floatingState.width = popup.offsetWidth;
+      floatingState.height = popup.offsetHeight;
+      floatingState.left = popup.offsetLeft;
+      floatingState.top = popup.offsetTop;
+      
+      // 儲存到 localStorage
+      localStorage.setItem('mapFloatingWidth', floatingState.width);
+      localStorage.setItem('mapFloatingHeight', floatingState.height);
+      localStorage.setItem('mapFloatingLeft', floatingState.left);
+      localStorage.setItem('mapFloatingTop', floatingState.top);
       
       // 設置最小化狀態
       popup.style.left = '0px';
