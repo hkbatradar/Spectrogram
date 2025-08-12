@@ -1,10 +1,5 @@
-import { initDropdown } from "./dropdown.js";
-
 // 確保在全域可以存取到 handleCallTypeChange
 window.handleCallTypeChange = window.handleCallTypeChange || function() {};
-
-// 先初始化並保存 callTypeDropdown 實例
-const callTypeDropdown = initDropdown('callTypeInput', ['CF-FM','FM-CF-FM','FM','FM-QCF','FM-QCF-FM','QCF']);
 
 export function initFreqContextMenu({
   viewerId,
@@ -104,11 +99,17 @@ export function initFreqContextMenu({
         item.style.background = 'rgba(0,0,0,0.08)';
       }
       item.addEventListener('click', () => {
-        // 直接使用 callTypeDropdown.select(idx)
-        if (callTypeDropdown) {
-          callTypeDropdown.select(idx);
+        // 取得 dropdown 實例
+        const dropdownBtn = document.getElementById('callTypeInput');
+        if (dropdownBtn?._dropdown) {
+          // 使用改進後的 select 方法來更新選中狀態
+          // 這會：
+          // 1. 更新按鈕文字
+          // 2. 根據 data-index 正確更新選中狀態
+          // 3. 觸發 onChange 事件
+          dropdownBtn._dropdown.select(idx);
         } else {
-          // fallback: 若找不到 dropdown 實例
+          // fallback: 如果找不到 dropdown 實例，則直接呼叫全域 handler
           if (window.handleCallTypeChange) {
             window.handleCallTypeChange(opt, idx);
           }
