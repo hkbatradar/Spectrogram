@@ -929,6 +929,18 @@ export function initMapPopup({
 
   function toggleMaximize() {
     if (!isMaximized) {
+      // 如果視窗是最小化狀態，要先還原所有隱藏的元素
+      if (isMinimized) {
+        if (layersControlContainer) layersControlContainer.style.display = '';
+        if (zoomControlContainer) zoomControlContainer.style.display = '';
+        if (routeToggleContainer) routeToggleContainer.style.display = '';
+        if (exportControlContainer) exportControlContainer.style.display = '';
+        if (coordScaleWrapper) coordScaleWrapper.style.display = '';
+        if (textToggleContainer) textToggleContainer.style.setProperty('margin-top', '1px', 'important');
+        isMinimized = false;
+        minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
+        minBtn.title = 'Minimize';
+      }
       prevWidth = popup.offsetWidth;
       prevHeight = popup.offsetHeight;
       prevLeft = popup.offsetLeft;
@@ -938,6 +950,7 @@ export function initMapPopup({
       popup.style.width = `${window.innerWidth -2}px`;
       popup.style.height = `${window.innerHeight -2}px`;
       maxBtn.innerHTML = '<i class="fa-regular fa-clone"></i>';
+      maxBtn.title = 'Restore Down';
       isMaximized = true;
     } else {
       popup.style.width = `${prevWidth}px`;
@@ -945,6 +958,7 @@ export function initMapPopup({
       popup.style.left = `${prevLeft}px`;
       popup.style.top = `${prevTop}px`;
       maxBtn.innerHTML = '<i class="fa-regular fa-square"></i>';
+      maxBtn.title = 'Maximize';
       isMaximized = false;
     }
     map?.invalidateSize();
@@ -962,6 +976,7 @@ export function initMapPopup({
       popup.style.width = '290px';
       popup.style.height = '360px';
       minBtn.innerHTML = '<i class="fa-solid fa-window-maximize"></i>';
+      minBtn.title = 'Restore Up';
       if (layersControlContainer) layersControlContainer.style.display = 'none';
       if (zoomControlContainer) zoomControlContainer.style.display = 'none';
       if (routeToggleContainer) routeToggleContainer.style.display = 'none';
@@ -975,6 +990,7 @@ export function initMapPopup({
       popup.style.left = `${minPrevLeft}px`;
       popup.style.top = `${minPrevTop}px`;
       minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
+      minBtn.title = 'Minimize';
       if (layersControlContainer) layersControlContainer.style.display = '';
       if (zoomControlContainer) zoomControlContainer.style.display = '';
       if (routeToggleContainer) routeToggleContainer.style.display = '';
