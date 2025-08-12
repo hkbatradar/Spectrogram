@@ -944,18 +944,19 @@ export function initMapPopup({
         floatingState.height = popup.offsetHeight;
         floatingState.left = popup.offsetLeft;
         floatingState.top = popup.offsetTop;
-        
         localStorage.setItem('mapFloatingWidth', floatingState.width);
         localStorage.setItem('mapFloatingHeight', floatingState.height);
         localStorage.setItem('mapFloatingLeft', floatingState.left);
         localStorage.setItem('mapFloatingTop', floatingState.top);
       }
-      
       // 設置最大化狀態
       popup.style.left = '0px';
       popup.style.top = '0px';
       popup.style.width = `${window.innerWidth -2}px`;
       popup.style.height = `${window.innerHeight -2}px`;
+      // 狀態：最大化
+      minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
+      minBtn.title = 'Minimize';
       maxBtn.innerHTML = '<i class="fa-regular fa-clone"></i>';
       maxBtn.title = 'Restore Down';
       isMaximized = true;
@@ -965,6 +966,9 @@ export function initMapPopup({
       popup.style.height = `${floatingState.height}px`;
       popup.style.left = `${floatingState.left}px`;
       popup.style.top = `${floatingState.top}px`;
+      // 狀態：一般（非最大化/最小化）
+      minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
+      minBtn.title = 'Minimize';
       maxBtn.innerHTML = '<i class="fa-regular fa-square"></i>';
       maxBtn.title = 'Maximize';
       isMaximized = false;
@@ -980,20 +984,21 @@ export function initMapPopup({
         floatingState.height = popup.offsetHeight;
         floatingState.left = popup.offsetLeft;
         floatingState.top = popup.offsetTop;
-        
         localStorage.setItem('mapFloatingWidth', floatingState.width);
         localStorage.setItem('mapFloatingHeight', floatingState.height);
         localStorage.setItem('mapFloatingLeft', floatingState.left);
         localStorage.setItem('mapFloatingTop', floatingState.top);
       }
-      
       // 設置最小化狀態（從任何狀態都直接最小化）
       popup.style.left = '0px';
       popup.style.top = `${window.innerHeight - 362}px`;
       popup.style.width = '290px';
       popup.style.height = '360px';
+      // 狀態：最小化
       minBtn.innerHTML = '<i class="fa-solid fa-window-maximize"></i>';
       minBtn.title = 'Restore Up';
+      maxBtn.innerHTML = '<i class="fa-regular fa-square"></i>';
+      maxBtn.title = 'Maximize';
       if (layersControlContainer) layersControlContainer.style.display = 'none';
       if (zoomControlContainer) zoomControlContainer.style.display = 'none';
       if (routeToggleContainer) routeToggleContainer.style.display = 'none';
@@ -1008,8 +1013,11 @@ export function initMapPopup({
       popup.style.height = `${floatingState.height}px`;
       popup.style.left = `${floatingState.left}px`;
       popup.style.top = `${floatingState.top}px`;
+      // 狀態：一般（非最大化/最小化）
       minBtn.innerHTML = '<i class="fa-solid fa-window-minimize"></i>';
       minBtn.title = 'Minimize';
+      maxBtn.innerHTML = '<i class="fa-regular fa-square"></i>';
+      maxBtn.title = 'Maximize';
       if (layersControlContainer) layersControlContainer.style.display = '';
       if (zoomControlContainer) zoomControlContainer.style.display = '';
       if (routeToggleContainer) routeToggleContainer.style.display = '';
