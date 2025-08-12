@@ -99,14 +99,18 @@ export function initFreqContextMenu({
         item.style.background = 'rgba(0,0,0,0.08)';
       }
       item.addEventListener('click', () => {
-        // 正確呼叫 dropdown 的 select 方法，確保同步 UI 與剔號
         const dropdownBtn = document.getElementById('callTypeInput');
-        if (dropdownBtn && dropdownBtn._dropdown) {
+        if (dropdownBtn?._dropdown) {
+          // 呼叫 dropdown 的 select 方法，會自動更新顯示文字、剔號及觸發 onChange
           dropdownBtn._dropdown.select(idx);
         } else {
-          // fallback: 直接呼叫 handleCallTypeChange
+          // fallback: 若找不到 dropdown 實例，則直接呼叫 handleCallTypeChange
           if (window.handleCallTypeChange) {
             window.handleCallTypeChange(opt, idx);
+          }
+          // 手動更新顯示文字
+          if (dropdownBtn) {
+            dropdownBtn.textContent = opt;
           }
         }
         hideSubmenu();
