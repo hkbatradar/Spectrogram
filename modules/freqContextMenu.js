@@ -100,15 +100,27 @@ export function initFreqContextMenu({
       }
       item.addEventListener('click', () => {
         const dropdownBtn = document.getElementById('callTypeInput');
-        if (dropdownBtn?._dropdown) {
-          // 呼叫 dropdown 的 select 方法，會自動更新顯示文字、剔號及觸發 onChange
-          dropdownBtn._dropdown.select(idx);
+        const dropdown = dropdownBtn?._dropdown;
+        if (dropdown) {
+          // 更新 dropdown instance 的狀態
+          dropdown.selectedIndex = idx;
+          dropdown.button.textContent = opt;
+
+          // 更新選項的 selected class
+          const dropdownItems = Array.from(dropdown.menu.querySelectorAll('.dropdown-item'));
+          dropdownItems.forEach((el, index) => {
+            el.classList.toggle('selected', index === idx);
+          });
+
+          // 觸發 onChange callback
+          if (dropdown.onChange) {
+            dropdown.onChange(opt, idx);
+          }
         } else {
           // fallback: 若找不到 dropdown 實例，則直接呼叫 handleCallTypeChange
           if (window.handleCallTypeChange) {
             window.handleCallTypeChange(opt, idx);
           }
-          // 手動更新顯示文字
           if (dropdownBtn) {
             dropdownBtn.textContent = opt;
           }
