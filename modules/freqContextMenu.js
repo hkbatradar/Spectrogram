@@ -99,14 +99,15 @@ export function initFreqContextMenu({
         item.style.background = 'rgba(0,0,0,0.08)';
       }
       item.addEventListener('click', () => {
-        // 直接呼叫全域的 handleCallTypeChange
-        if (window.handleCallTypeChange) {
-          window.handleCallTypeChange(opt, idx);
-        }
-        // 更新下拉選單的顯示文字
+        // 正確呼叫 dropdown 的 select 方法，確保同步 UI 與剔號
         const dropdownBtn = document.getElementById('callTypeInput');
-        if (dropdownBtn) {
-          dropdownBtn.textContent = opt;
+        if (dropdownBtn && dropdownBtn._dropdown) {
+          dropdownBtn._dropdown.select(idx);
+        } else {
+          // fallback: 直接呼叫 handleCallTypeChange
+          if (window.handleCallTypeChange) {
+            window.handleCallTypeChange(opt, idx);
+          }
         }
         hideSubmenu();
         hide();
