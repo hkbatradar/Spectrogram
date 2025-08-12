@@ -100,30 +100,15 @@ export function initFreqContextMenu({
       }
       item.addEventListener('click', () => {
         const dropdownBtn = document.getElementById('callTypeInput');
-        const dropdown = dropdownBtn?._dropdown;
-        if (dropdown) {
-          // 取得所有 dropdown items
-          const dropdownItems = Array.from(dropdown.menu.querySelectorAll('.dropdown-item'));
-          
-          // 移除舊的 selected class
-          dropdownItems.forEach(el => el.classList.remove('selected'));
-          
-          // 找到對應新選擇的 data-index 的元素並加上 selected class
-          const selectedItem = dropdownItems.find(el => el.dataset.index === String(idx));
-          if (selectedItem) {
-            selectedItem.classList.add('selected');
-          }
-          
-          // 更新 dropdown 狀態
-          dropdown.selectedIndex = idx;
-          dropdown.button.textContent = opt;
-          
-          // 觸發 onChange callback
-          if (dropdown.onChange) {
-            dropdown.onChange(opt, idx);
-          }
+        if (dropdownBtn?._dropdown) {
+          // 使用 select 方法，它會：
+          // 1. 更新 selectedIndex
+          // 2. 更新按鈕文字
+          // 3. 根據數組索引切換 selected class（這樣會自動對應到正確的 data-index）
+          // 4. 觸發 onChange callback
+          dropdownBtn._dropdown.select(idx);
         } else {
-          // fallback: 若找不到 dropdown 實例，則直接呼叫 handleCallTypeChange
+          // fallback: 若找不到 dropdown 實例
           if (window.handleCallTypeChange) {
             window.handleCallTypeChange(opt, idx);
           }
