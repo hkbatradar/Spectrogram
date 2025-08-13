@@ -353,10 +353,6 @@ export function initAutoIdPanel({
           LowHeelTimeWarning.style.display = showLowHeelTimeWarning ? 'flex' : 'none';
           LowHeelTimeWarning.textContent = 'Heel frequency should come before Low frequency';
         }
-    if (kneeOrderWarning) {
-      kneeOrderWarning.style.display = showKneeOrder ? 'flex' : 'none';
-      kneeOrderWarning.textContent = 'Knee frequency should be higher than Low frequency';
-    }
     if (startfreqWarning) {
       startfreqWarning.style.display = showStartFreqWarning ? 'flex' : 'none';
       startfreqWarning.textContent = 'Start frequency should be the first one';
