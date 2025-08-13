@@ -297,7 +297,10 @@ export function initAutoIdPanel({
       lowFreqWarning.style.display = showLowFreqWarning ? 'flex' : 'none';
       lowFreqWarning.textContent = 'The low frequency should be the lowest one';
     }
-    if (kneeOrderWarning) kneeOrderWarning.style.display = showKneeOrder ? 'flex' : 'none';
+    if (kneeOrderWarning) {
+      kneeOrderWarning.style.display = showKneeOrder ? 'flex' : 'none';
+      kneeOrderWarning.textContent = 'The knee frequency should be higher than the lowest frequency';
+    }
     if (startfreqWarning) {
       startfreqWarning.style.display = showStartFreqWarning ? 'flex' : 'none';
       startfreqWarning.textContent = 'The start frequency should be the first one';
