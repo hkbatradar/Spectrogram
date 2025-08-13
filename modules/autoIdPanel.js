@@ -281,10 +281,22 @@ export function initAutoIdPanel({
     if (inputs.start) inputs.start.classList.toggle('warning', showStartFreqWarning || showQCFDuration);
     if (inputs.end) inputs.end.classList.toggle('warning', showEndFreqWarning || showQCFDuration);
     
-    if (QCFDurationWarning) QCFDurationWarning.style.display = showQCFDuration ? 'flex' : 'none';
-    if (QCFSlopeWarning) QCFSlopeWarning.style.display = showQCFSlope ? 'flex' : 'none';
-    if (highFreqWarning) highFreqWarning.style.display = showHighFreqWarning ? 'flex' : 'none';
-    if (lowFreqWarning) lowFreqWarning.style.display = showLowFreqWarning ? 'flex' : 'none';
+    if (QCFDurationWarning) {
+      QCFDurationWarning.style.display = showQCFDuration ? 'flex' : 'none';
+      QCFDurationWarning.textContent = 'Duration of QCF should be >= 1ms';
+    }
+    if (QCFSlopeWarning) {
+      QCFSlopeWarning.style.display = showQCFSlope ? 'flex' : 'none';
+      QCFSlopeWarning.textContent = 'Slope of QCF should be < 1 and >= 0.1 kHz/ms';
+    }
+    if (highFreqWarning) {
+      highFreqWarning.style.display = showHighFreqWarning ? 'flex' : 'none';
+      highFreqWarning.textContent = 'The high frequency should be the highest one';
+    }
+    if (lowFreqWarning) {
+      lowFreqWarning.style.display = showLowFreqWarning ? 'flex' : 'none';
+      lowFreqWarning.textContent = 'The low frequency should be the lowest one';
+    }
     if (kneeOrderWarning) kneeOrderWarning.style.display = showKneeOrder ? 'flex' : 'none';
     if (startfreqWarning) {
       startfreqWarning.style.display = showStartFreqWarning ? 'flex' : 'none';
