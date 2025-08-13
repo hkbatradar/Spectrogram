@@ -1075,8 +1075,19 @@ export function initAutoIdPanel({
     if (key === 'end') endTime = time;
     tabData[currentTab].startTime = startTime;
     tabData[currentTab].endTime = endTime;
-    // 新增/更新 marker 時，重置受影響的 draggingHandle 並即時更新 path 弧度
-    resetCurvesForMarker(key, currentTab);
+
+    // 找出 time 上排序的 marker key
+    const markerEntries = Object.entries(markers)
+      .filter(([k, m]) => m.freq != null && m.time != null)
+      .sort((a, b) => a[1].time - b[1].time);
+    const idx = markerEntries.findIndex(([k]) => k === key);
+    // 取得相鄰 marker key
+    const affectedKeys = [key];
+    if (idx > 0) affectedKeys.push(markerEntries[idx - 1][0]);
+    if (idx < markerEntries.length - 1) affectedKeys.push(markerEntries[idx + 1][0]);
+    // 對自己與相鄰 marker 都重置 path
+    affectedKeys.forEach(k => resetCurvesForMarker(k, currentTab));
+
     updateDerived();
     updateMarkers();
     clearResult();
