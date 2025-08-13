@@ -992,18 +992,8 @@ export function initAutoIdPanel({
   function onMarkerDrag(e) {
     if (!draggingKey || !markersEnabled) return;
     if (!markerWasDragged) {
-      // 找出 time 上排序的 marker key
-      const markerEntries = Object.entries(markers)
-        .filter(([k, m]) => m.freq != null && m.time != null)
-        .sort((a, b) => a[1].time - b[1].time);
-      const idx = markerEntries.findIndex(([k]) => k === draggingKey);
-      // 取得相鄰 marker key 並重置 path
-      if (idx > 0) resetCurvesForMarker(markerEntries[idx - 1][0]);
-      resetCurvesForMarker(draggingKey);
-      if (idx < markerEntries.length - 1) resetCurvesForMarker(markerEntries[idx + 1][0]);
-      updateLines();
+      markerWasDragged = true;
     }
-    markerWasDragged = true;
     const rect = viewer.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -1022,8 +1012,19 @@ export function initAutoIdPanel({
     tabData[currentTab].endTime = endTime;
     markers[draggingKey].freq = freq;
     markers[draggingKey].time = time;
+
+    // 在每次拖動時找出並更新相鄰的 markers path
+    const markerEntries = Object.entries(markers)
+      .filter(([k, m]) => m.freq != null && m.time != null)
+      .sort((a, b) => a[1].time - b[1].time);
+    const idx = markerEntries.findIndex(([k]) => k === draggingKey);
+    // 移除相關 curves 以重新計算
+    if (idx > 0) resetCurvesForMarker(markerEntries[idx - 1][0]);
+    resetCurvesForMarker(draggingKey);
+    if (idx < markerEntries.length - 1) resetCurvesForMarker(markerEntries[idx + 1][0]);
+
     updateDerived();
-    updateMarkers();
+    updateMarkers(); // 這會調用 updateLines() 重新計算和繪製所有 path
   }
 
   function stopMarkerDrag() {
