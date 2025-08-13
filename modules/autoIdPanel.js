@@ -992,7 +992,15 @@ export function initAutoIdPanel({
   function onMarkerDrag(e) {
     if (!draggingKey || !markersEnabled) return;
     if (!markerWasDragged) {
+      // 找出 time 上排序的 marker key
+      const markerEntries = Object.entries(markers)
+        .filter(([k, m]) => m.freq != null && m.time != null)
+        .sort((a, b) => a[1].time - b[1].time);
+      const idx = markerEntries.findIndex(([k]) => k === draggingKey);
+      // 取得相鄰 marker key 並重置 path
+      if (idx > 0) resetCurvesForMarker(markerEntries[idx - 1][0]);
       resetCurvesForMarker(draggingKey);
+      if (idx < markerEntries.length - 1) resetCurvesForMarker(markerEntries[idx + 1][0]);
       updateLines();
     }
     markerWasDragged = true;
@@ -1031,7 +1039,15 @@ export function initAutoIdPanel({
     validateMandatoryInputs();
     clearResult();
     if (key && markerWasDragged) {
+      // 找出 time 上排序的 marker key
+      const markerEntries = Object.entries(markers)
+        .filter(([k, m]) => m.freq != null && m.time != null)
+        .sort((a, b) => a[1].time - b[1].time);
+      const idx = markerEntries.findIndex(([k]) => k === key);
+      // 取得相鄰 marker key 並重置 path
+      if (idx > 0) resetCurvesForMarker(markerEntries[idx - 1][0]);
       resetCurvesForMarker(key);
+      if (idx < markerEntries.length - 1) resetCurvesForMarker(markerEntries[idx + 1][0]);
       updateLines();
     }
   }
