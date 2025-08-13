@@ -192,7 +192,11 @@ export function initAutoIdPanel({
     const lowFreqWarning = document.getElementById('lowfreq-warning');
     const startfreqWarning = document.getElementById('startfreq-warning');
     const endfreqWarning = document.getElementById('endfreq-warning');
-    const callType = callTypeDropdown.items[callTypeDropdown.selectedIndex];
+  const callType = callTypeDropdown.items[callTypeDropdown.selectedIndex];
+  const HighKneeTimeWarning = document.getElementById('highknee-time-warning');
+  const LowKneeTimeWarning = document.getElementById('lowknee-time-warning');
+  const HighHeelTimeWarning = document.getElementById('highheel-time-warning');
+  const LowHeelTimeWarning = document.getElementById('lowheel-time-warning');
     let showQCFDuration = false;
     let showQCFSlope = false;
     
@@ -270,14 +274,50 @@ export function initAutoIdPanel({
       }
     }
     
-    const showKneeOrder = !isNaN(knee) && !isNaN(low) && knee < low;
-    const hasWarnings = showQCFDuration || showQCFSlope || showHighFreqWarning || 
-                       showLowFreqWarning || showKneeOrder || showStartFreqWarning || 
-                       showEndFreqWarning;
+  // const showKneeOrder = !isNaN(knee) && !isNaN(low) && knee < low;
+  let hasWarnings = showQCFDuration || showQCFSlope || showHighFreqWarning || 
+             showLowFreqWarning || showStartFreqWarning || 
+             showEndFreqWarning;
+    // 新增 Knee/Heel/High/Low time 順序檢查
+    let showHighKneeTimeWarning = false;
+    let showLowKneeTimeWarning = false;
+    let showHighHeelTimeWarning = false;
+    let showLowHeelTimeWarning = false;
+
+    // 檢查 Knee 順序
+    if (inputs.knee.value !== '' && markers.knee?.time != null) {
+      if (inputs.high.value !== '' && markers.high?.time != null) {
+        if (markers.knee.time <= markers.high.time) {
+          showHighKneeTimeWarning = true;
+        }
+      }
+      if (inputs.low.value !== '' && markers.low?.time != null) {
+        if (markers.knee.time >= markers.low.time) {
+          showLowKneeTimeWarning = true;
+        }
+      }
+    }
+    // 檢查 Heel 順序
+    if (inputs.heel.value !== '' && markers.heel?.time != null) {
+      if (inputs.high.value !== '' && markers.high?.time != null) {
+        if (markers.heel.time <= markers.high.time) {
+          showHighHeelTimeWarning = true;
+        }
+      }
+      if (inputs.low.value !== '' && markers.low?.time != null) {
+        if (markers.heel.time >= markers.low.time) {
+          showLowHeelTimeWarning = true;
+        }
+      }
+    }
+
+    hasWarnings = hasWarnings || showHighKneeTimeWarning || showLowKneeTimeWarning || 
+                  showHighHeelTimeWarning || showLowHeelTimeWarning;
     
     if (inputs.high) inputs.high.classList.toggle('warning', showHighFreqWarning);
     if (inputs.low) inputs.low.classList.toggle('warning', showLowFreqWarning || showKneeOrder);
-    if (inputs.knee) inputs.knee.classList.toggle('warning', showKneeOrder);
+  if (inputs.knee) inputs.knee.classList.toggle('warning', showHighKneeTimeWarning || showLowKneeTimeWarning);
+  if (inputs.heel) inputs.heel.classList.toggle('warning', showHighHeelTimeWarning || showLowHeelTimeWarning);
     if (inputs.start) inputs.start.classList.toggle('warning', showStartFreqWarning || showQCFDuration);
     if (inputs.end) inputs.end.classList.toggle('warning', showEndFreqWarning || showQCFDuration);
     
@@ -287,27 +327,43 @@ export function initAutoIdPanel({
     }
     if (QCFSlopeWarning) {
       QCFSlopeWarning.style.display = showQCFSlope ? 'flex' : 'none';
-      QCFSlopeWarning.textContent = 'Slope of QCF should be < 1 and >= 0.1 kHz/ms';
+      QCFSlopeWarning.textContent = 'Slope of QCF should be <1 and >=0.1kHz/ms';
     }
     if (highFreqWarning) {
       highFreqWarning.style.display = showHighFreqWarning ? 'flex' : 'none';
-      highFreqWarning.textContent = 'The high frequency should be the highest one';
+      highFreqWarning.textContent = 'High frequency should be the highest one';
     }
     if (lowFreqWarning) {
       lowFreqWarning.style.display = showLowFreqWarning ? 'flex' : 'none';
-      lowFreqWarning.textContent = 'The low frequency should be the lowest one';
+      lowFreqWarning.textContent = 'Low frequency should be the lowest one';
     }
+        if (HighKneeTimeWarning) {
+          HighKneeTimeWarning.style.display = showHighKneeTimeWarning ? 'flex' : 'none';
+          HighKneeTimeWarning.textContent = 'Knee frequency should come after High frequency';
+        }
+        if (LowKneeTimeWarning) {
+          LowKneeTimeWarning.style.display = showLowKneeTimeWarning ? 'flex' : 'none';
+          LowKneeTimeWarning.textContent = 'Knee frequency should come before Low frequency';
+        }
+        if (HighHeelTimeWarning) {
+          HighHeelTimeWarning.style.display = showHighHeelTimeWarning ? 'flex' : 'none';
+          HighHeelTimeWarning.textContent = 'Heel frequency should come after High frequency';
+        }
+        if (LowHeelTimeWarning) {
+          LowHeelTimeWarning.style.display = showLowHeelTimeWarning ? 'flex' : 'none';
+          LowHeelTimeWarning.textContent = 'Heel frequency should come before Low frequency';
+        }
     if (kneeOrderWarning) {
       kneeOrderWarning.style.display = showKneeOrder ? 'flex' : 'none';
-      kneeOrderWarning.textContent = 'The knee frequency should be higher than the lowest frequency';
+      kneeOrderWarning.textContent = 'Knee frequency should be higher than Low frequency';
     }
     if (startfreqWarning) {
       startfreqWarning.style.display = showStartFreqWarning ? 'flex' : 'none';
-      startfreqWarning.textContent = 'The start frequency should be the first one';
+      startfreqWarning.textContent = 'Start frequency should be the first one';
     }
     if (endfreqWarning) {
       endfreqWarning.style.display = showEndFreqWarning ? 'flex' : 'none';
-      endfreqWarning.textContent = 'The end frequency should be the last one';
+      endfreqWarning.textContent = 'End frequency should be the last one';
     }
     if (pulseIdBtn) pulseIdBtn.disabled = hasWarnings;
     if (sequenceIdBtn) sequenceIdBtn.disabled = hasWarnings;
