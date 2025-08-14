@@ -336,7 +336,7 @@ export function initAutoIdPanel({
           showLowHeelTimeWarning = true;
         }
       }
-    }
+    } 
 
     hasWarnings = hasWarnings || showHighKneeTimeWarning || showLowKneeTimeWarning || 
                   showHighHeelTimeWarning || showLowHeelTimeWarning;
