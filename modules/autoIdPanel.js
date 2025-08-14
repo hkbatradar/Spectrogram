@@ -345,8 +345,8 @@ export function initAutoIdPanel({
   if (inputs.low) inputs.low.classList.toggle('warning', showLowFreqWarning || (callType === 'FM-QCF' && showQCFDuration && !markers.heel?.time));
   if (inputs.knee) inputs.knee.classList.toggle('warning', showHighKneeTimeWarning || showLowKneeTimeWarning || (callType === 'FM-QCF' && (showQCFDuration || showQCFSlope)));
   if (inputs.heel) inputs.heel.classList.toggle('warning', showHighHeelTimeWarning || showLowHeelTimeWarning || (callType === 'FM-QCF' && markers.heel?.time && (showQCFDuration || showQCFSlope)));
-    if (inputs.start) inputs.start.classList.toggle('warning', showStartFreqWarning || (callType === 'QCF' && showQCFDuration));
-    if (inputs.end) inputs.end.classList.toggle('warning', showEndFreqWarning || (callType === 'QCF' && showQCFDuration));
+    if (inputs.start) inputs.start.classList.toggle('warning', showStartFreqWarning || (callType === 'QCF' && (showQCFDuration || showQCFSlope)));
+    if (inputs.end) inputs.end.classList.toggle('warning', showEndFreqWarning || (callType === 'QCF' && (showQCFDuration || showQCFSlope)));
     
     if (QCFDurationWarning) {
       QCFDurationWarning.style.display = showQCFDuration ? 'flex' : 'none';
