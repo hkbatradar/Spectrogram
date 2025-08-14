@@ -200,13 +200,6 @@ export function initAutoIdPanel({
     let showQCFDuration = false;
     let showQCFSlope = false;
 
-    // 清除之前的 warning class
-    Object.values(inputs).forEach(input => {
-      if (input && input.parentElement) {
-        input.parentElement.classList.remove('warning');
-      }
-    });
-
     // FM-QCF 檢查
     if (callType === 'FM-QCF') {
       // 取得 marker
@@ -223,11 +216,6 @@ export function initAutoIdPanel({
           const slope = bw / duration;
           showQCFSlope = !(slope < 1 && slope >= 0.1);
         }
-        // 加上 warning class 到 Knee 和 Heel 輸入欄位的父元素
-        if (showQCFDuration || showQCFSlope) {
-          if (inputs.knee && inputs.knee.parentElement) inputs.knee.parentElement.classList.add('warning');
-          if (inputs.heel && inputs.heel.parentElement) inputs.heel.parentElement.classList.add('warning');
-        }
       } else if (knee?.freq != null && knee?.time != null && low?.freq != null && low?.time != null && (heel?.freq == null || heel?.time == null)) {
         // 2. Knee, Low 有值，Heel 無值
         const duration = (low.time - knee.time) * 1000;
@@ -236,11 +224,6 @@ export function initAutoIdPanel({
         if (duration > 0) {
           const slope = bw / duration;
           showQCFSlope = !(slope < 1 && slope >= 0.1);
-        }
-        // 加上 warning class 到 Knee 和 Low 輸入欄位的父元素
-        if (showQCFDuration || showQCFSlope) {
-          if (inputs.knee && inputs.knee.parentElement) inputs.knee.parentElement.classList.add('warning');
-          if (inputs.low && inputs.low.parentElement) inputs.low.parentElement.classList.add('warning');
         }
       }
     }
